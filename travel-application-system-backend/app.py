@@ -2,7 +2,6 @@ import asyncio
 from email import message
 from email.mime import application
 import json
-from requests import delete
 import tornado.web
 import sqlite3
 
