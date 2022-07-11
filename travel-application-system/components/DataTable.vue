@@ -525,6 +525,9 @@ if (props.currentUser.role == "admin") {
   url = "http://kavli.pku.edu.cn:8888/applications?pkuId=" + props.currentUser.pkuId;
 }
 const { data: resp, pending, refresh, error } = await useFetch(url);
+if(error){
+  alert("there is error")
+}
 let tableData: Application[] = reactive(resp.value.applications);
 let drawerOpen = ref(false);
 
