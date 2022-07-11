@@ -117,19 +117,13 @@
           >
         </template>
       </el-table-column>
-      <!-- <el-table-column v-if="currentUser.role=='user'" label="Actions">
+      <el-table-column v-if="currentUser.role=='user'" label="Actions">
         <template #default="scope">
-          <el-button size="small" @click="onEdit(scope.$index, scope.row)"
-            >Edit</el-button
-          >
-          <el-button
-            size="small"
-            type="primary"
-            @click="onSubmit(scope.$index, scope.row)"
-            >Submit</el-button
+          <el-button size="small" @click="onDelete(scope.$index, scope.row)"
+            >Cancel</el-button
           >
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <el-dialog v-model="dialogDetails" title="Details" width="50%">
       <el-descriptions title="Application Details" direction="vertical" border>
@@ -181,8 +175,8 @@
       </el-descriptions>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
+          <el-button @click="dialogDetails = false">Cancel</el-button>
+          <el-button type="primary" @click="dialogDetails = false"
             >Confirm</el-button
           >
         </span>
@@ -555,6 +549,18 @@ interface Application {
   applicationId: number;
 }
 const applicationDetails = ref({});
+
+const onDelete = async (index, row) => {
+  console.log(row);
+  const { data: resp } = await useFetch(
+    "http://kavli.pku.edu.cn:8888/applications/" + row.applicationId,
+    {
+      method: "delete",
+    }
+  )
+  console.log(resp.value);
+};
+
 const onDetails = (index, row) => {
   console.log(row);
   applicationDetails.value = row;

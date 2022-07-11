@@ -2,6 +2,7 @@ import asyncio
 from email import message
 from email.mime import application
 import json
+from requests import delete
 import tornado.web
 import sqlite3
 
@@ -113,8 +114,13 @@ class Application(Table):
         print(res)
         return res
     
-    def delete(self):
-        return
+    def delete(self,applicationId):
+        # DELETE FROM MySQL_table WHERE id=10;
+        query_string_delete = "delete from applications where applicationId = {applicationId}".format(applicationId=applicationId)
+        print(query_string_delete)
+        self.cursor.execute(query_string_delete)
+        conn.commit()
+        return {"message":"application {applicationId} has been deleted!".format(applicationId=applicationId)}
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -174,7 +180,7 @@ class LogoutHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
 
     def options(self, *args):
         self.set_status(204)
@@ -200,7 +206,7 @@ class ApplicationHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "*")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, OPTIONS')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
 
     def get(self):
         list_applications_params = dict()
@@ -209,6 +215,11 @@ class ApplicationHandler(tornado.web.RequestHandler):
         application = Application(**list_applications_params)
         result = application.retrieve()
         self.write({"applications":[{k: record[self.schema.index(k)] for k in self.schema} for record in result]})
+
+    def delete(self, applicationId):
+        application = Application(applicationId=applicationId)
+        result = application.delete(applicationId=applicationId)
+        self.write(result)
 
     def put(self,applicationId):
         payload = json.loads(self.request.body)
