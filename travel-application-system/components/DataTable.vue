@@ -119,7 +119,7 @@
       </el-table-column>
       <el-table-column v-if="currentUser.role=='user'" label="Actions">
         <template #default="scope">
-          <el-button size="small" @click="onDelete(scope.$index, scope.row)"
+          <el-button size="small" @click="onConfirmDelete(scope.$index, scope.row)"
             >Cancel</el-button
           >
         </template>
@@ -383,6 +383,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props = defineProps(["currentUser"]);
 const formSize = ref("large");
@@ -550,6 +551,35 @@ interface Application {
 }
 const applicationDetails = ref({});
 
+const delay = (ms: number) => {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+const onConfirmDelete = (index, row) => {
+  ElMessageBox.confirm(
+    'Will delete the application. Continue?',
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      onDelete(index, row);
+      ElMessage({
+        type: 'success',
+        message: 'Delete completed',
+      })
+      delay(3000)
+      location.reload()
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: 'Delete canceled',
+      })
+    })
+}
 const onDelete = async (index, row) => {
   console.log(row);
   const { data: resp } = await useFetch(
