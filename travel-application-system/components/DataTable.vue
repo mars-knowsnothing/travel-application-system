@@ -525,9 +525,9 @@ const ApplicationFormRules = reactive<FormRules>({
 
 let url = "";
 if (props.currentUser.role == "admin") {
-  url = "http://localhost:8888/applications";
+  url = "http://kavli.pku.edu.cn:8888/applications";
 } else {
-  url = "http://localhost:8888/applications?pkuId=" + props.currentUser.pkuId;
+  url = "http://kavli.pku.edu.cn:8888/applications?pkuId=" + props.currentUser.pkuId;
 }
 const { data: resp, pending, refresh, error } = await useFetch(url);
 let tableData: Application[] = reactive(resp.value.applications);
@@ -564,7 +564,7 @@ const onApprove = async (index, row) => {
   console.log(index);
   console.log(row.applicationId);
   const { data: resp } = await useFetch(
-    "http://localhost:8888/applications/" + row.applicationId,
+    "http://kavli.pku.edu.cn:8888/applications/" + row.applicationId,
     {
       method: "put",
       body: {
@@ -600,7 +600,7 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
     ApplicationFormData.dateOfReturningToPKU =
       ApplicationFormData.dateOfReturningToPKU.toLocaleDateString();
     const { data: resp } = await useFetch(
-      "http://localhost:8888/applications",
+      "http://kavli.pku.edu.cn:8888/applications",
       {
         method: "post",
         body: ApplicationFormData,

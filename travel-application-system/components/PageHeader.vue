@@ -25,7 +25,7 @@ const activeIndex = ref("1");
 const handleSelect = async (key: string, keyPath: string[]) => {
   // console.log(key, keyPath)
   if (key == "logout") {
-    const { data: resp } = await useFetch("http://localhost:8888/logout", {
+    const { data: resp } = await useFetch("http://kavli.pku.edu.cn:8888/logout", {
       method: "post",
       body: props.currentUser,
     });

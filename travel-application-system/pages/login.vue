@@ -49,7 +49,7 @@ const formLogin = reactive({
 });
 const onLogin = async () => {
   console.log(formLogin);
-  const { data: resp } = await useFetch("http://localhost:8888/login", {
+  const { data: resp } = await useFetch("http://kavli.pku.edu.cn:8888/login", {
     method: "post",
     body: formLogin,
   });
