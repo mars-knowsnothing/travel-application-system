@@ -1,1 +1,0 @@
-import{y as o}from"./entry-2b941c5d.mjs";import{u as r}from"./cookie-72a35f76.mjs";var n=o((u,l)=>{const e=r("userInfo");return console.log(e.value),e.value==null?"/login":(console.log(typeof e.value),e.value.role=="admin"?"/admin":"/user")});export{n as default};

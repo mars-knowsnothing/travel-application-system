@@ -109,7 +109,7 @@
             >Details</el-button
           >
           <el-button
-            v-if="scope.row.approvalStatus == 'pending-approval'"
+            v-if="scope.row.approvalStatus == 'pending-approval' && scope.row.name!=currentUser.name"
             size="small"
             type="primary"
             @click="onApprove(scope.$index, scope.row)"
